@@ -8,6 +8,6 @@ To build images and pass through Host's folder
 permissions for folder mounting and writing, use:
 
 ```bash
-docker build --build-arg UID=$(id -u) <image> Dockerfile<type> .
+docker build --build-arg UID=$(id -u) -t <image> -f Dockerfile<type> .
 
 ```
