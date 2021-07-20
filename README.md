@@ -11,3 +11,8 @@ permissions for folder mounting and writing, use:
 docker build --build-arg UID=$(id -u) -t <image> -f Dockerfile<type> .
 
 ```
+
+TODO:
+
+- jupyterlab builds, uses
+- pycharm integrations
