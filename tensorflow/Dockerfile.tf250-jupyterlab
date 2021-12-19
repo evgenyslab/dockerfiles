@@ -8,6 +8,8 @@ RUN pip3 install \
     Pillow \
     matplotlib \
     jupyterlab \
+    opencv-python \
+    jedi==0.17.2 \
     tensorflow_hub
 
 # default input argument:
