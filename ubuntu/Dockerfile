@@ -2,7 +2,7 @@
 # docker build -t VS-Code-Server .
 
 # Run:
-# docker run -d -it -p8080:8080 VS-Code-Server
+# docker run -d -it -p8080:8080 --env PASSWORD=myPassWord VS-Code-Server
 
 # NOTE:
 # On Safari need to turn off `deverloper->experimental features->WebGL2.0`
@@ -37,6 +37,36 @@ RUN curl -fOL https://github.com/cdr/code-server/releases/download/v3.12.0/code-
 
 RUN dpkg -i code-server_3.12.0_amd64.deb && \
     rm code-server_3.12.0_amd64.deb
+
+
+# default input argument:
+ARG UID=999
+
+# create groups and usernames
+RUN groupadd -g $UID user && \
+    useradd -r -u $UID -g user user && \
+    yes password | passwd user
+
+RUN mkdir /home/user 
+
+# Give user permissions for /usr/local/bin to allow importing stuffs.
+RUN chown -R user: /usr/local/bin
+
+# give permissions to user to access their home folder, allows
+# pycharm to sftp files over
+RUN chown -R user:user /home/user && \
+    chgrp -R user /home/user && \
+    chmod -R g+rwx /home/user
+
+WORKDIR /home/user
+
+USER user
+
+# Install coder extensions:
+RUN code-server --install-extension \
+    ms-python.python \
+    ms-vscode.cpptools \
+    vscode-icons-team.vscode-icons 
 
 CMD ["code-server", "--bind-addr", "0.0.0.0:8080"]
 
