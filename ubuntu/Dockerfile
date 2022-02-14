@@ -15,31 +15,15 @@ RUN apt-get update
 RUN apt-get upgrade -y
 
 RUN apt-get install -y \
-    build-essential \
-    cmake \
-    curl \
     git \
-    openssh-server \
-    python3 \
-    python3-dev \
-    python3-pip \
     vim \
+    curl \
+    zsh \
     wget
 
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN python3 -m pip install --upgrade pip
-
-RUN mkdir -p /var/run/sshd
-
-RUN curl -fOL https://github.com/cdr/code-server/releases/download/v3.12.0/code-server_3.12.0_amd64.deb
-
-RUN dpkg -i code-server_3.12.0_amd64.deb && \
-    rm code-server_3.12.0_amd64.deb
-
-
-# default input argument:
 ARG UID=999
 
 # create groups and usernames
@@ -62,11 +46,7 @@ WORKDIR /home/user
 
 USER user
 
-# Install coder extensions:
-RUN code-server --install-extension \
-    ms-python.python \
-    ms-vscode.cpptools \
-    vscode-icons-team.vscode-icons 
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)" -- \
+    -t robbyrussell
 
-CMD ["code-server", "--bind-addr", "0.0.0.0:8080"]
 
