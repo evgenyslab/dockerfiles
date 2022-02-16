@@ -23,13 +23,15 @@ RUN apt-get install -y \
     cmake \
     curl \
     git \
-#    openssh-server \
     python3 \
     python3-dev \
     python3-pip \
     python3-virtualenv \
     vim \
     zsh \
+    zip \
+    # sudo for user...
+    sudo \
     wget
 
 # new CMAKE (packaged version is old)
@@ -41,20 +43,32 @@ RUN apt-get update
 
 RUN apt-get install cmake -y
 
+RUN curl -fsSL https://code-server.dev/install.sh | sh
+
+# Install coder extensions:
+# RUN code-server --install-extension ms-vscode.cpptools
+RUN code-server --install-extension ms-python.python
+RUN code-server --install-extension vscode-icons-team.vscode-icons 
+RUN code-server --install-extension anwar.papyrus-pdf
+RUN code-server --install-extension ritwickdey.liveserver
+# TODO
+# - get configuration for vs-code for:
+#   - color theme
+#   - keyboard bindings
+#   - npm/js development plugins?
+#   - cpp development plugins for cmake?
+
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
 RUN python3 -m pip install --upgrade pip
 
-# RUN mkdir -p /var/run/sshd
+COPY Requirements.txt /tmp/
 
-# RUN curl -fOL https://github.com/cdr/code-server/releases/download/v3.12.0/code-server_3.12.0_amd64.deb
+RUN pip install -r /tmp/Requirements.txt
 
-# RUN dpkg -i code-server_3.12.0_amd64.deb && \
-#    rm code-server_3.12.0_amd64.deb
-
-RUN curl -fsSL https://code-server.dev/install.sh | sh
+RUN rm /tmp/Requirements.txt
 
 # default input argument:
 ARG UID=999
@@ -64,7 +78,14 @@ RUN groupadd -g $UID user && \
     useradd -r -u $UID -g user user && \
     yes password | passwd user
 
+# Add user to sudo group:
+RUN adduser user sudo
+# Remove password protection on user for sudo:
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
 RUN mkdir /home/user 
+
+RUN mkdir /home/user/git
 
 # Give user permissions for /usr/local/bin to allow importing stuffs.
 RUN chown -R user: /usr/local/bin
@@ -85,10 +106,5 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 
 ENV SHELL=/usr/bin/zsh
 
-# Install coder extensions:
-# RUN code-server --install-extension ms-vscode.cpptools
-# RUN code-server --install-extension ms-python.python
-# RUN code-server --install-extension vscode-icons-team.vscode-icons 
-
-CMD ["code-server", "--bind-addr", "0.0.0.0:8080"]
+CMD ["code-server", "--bind-addr", "0.0.0.0:8080", "/home/user/git"]
 

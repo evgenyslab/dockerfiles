@@ -1,0 +1,14 @@
+awscli
+boto3
+numpy
+matplotlib
+jupyterlab
+pillow
+opencv-python
+scikit-learn
+scikit-image
+psycopg2-binary
+mpld3
+ipympl
+scipy
+jedi==0.17.2

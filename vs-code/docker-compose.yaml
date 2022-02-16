@@ -1,0 +1,14 @@
+version: "2"
+services:
+
+  # Deployment image for PROC
+  vs-code:
+    build:
+      context: .
+    image: vs-code
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+      - "5500:5500"
+    environment:
+      PASSWORD: hacker
