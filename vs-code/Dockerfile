@@ -104,6 +104,14 @@ USER user
 RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)" -- \
     -t robbyrussell
 
+RUN mkdir -p /home/user/.local/share/code-server/User
+
+ARG KEYBINDING
+RUN wget $KEYBINDING -O /home/user/.local/share/code-server/User/keybindings.json
+
+ARG SETTINGS
+RUN wget $SETTINGS -O /home/user/.local/share/code-server/User/settings.json
+
 ENV SHELL=/usr/bin/zsh
 
 CMD ["code-server", "--bind-addr", "0.0.0.0:8080", "/home/user/git"]

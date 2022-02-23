@@ -5,10 +5,13 @@ services:
   vs-code:
     build:
       context: .
+      args:
+        KEYBINDING: https://gist.githubusercontent.com/evgenyslab/dbc5421bd1da2ae9c9c67908e676d212/raw/3aec0ab5ad95a1a78a936f10213d78026e658b7a/vs-keybindings.json
+        SETTINGS: https://gist.githubusercontent.com/evgenyslab/dbc5421bd1da2ae9c9c67908e676d212/raw/3aec0ab5ad95a1a78a936f10213d78026e658b7a/vs-settings.json
     image: vs-code
     ports:
       - "8080:8080"
       - "8081:8081"
       - "5500:5500"
     environment:
-      PASSWORD: hacker
+      PASSWORD: hack
