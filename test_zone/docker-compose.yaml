@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  app-ubuntu:
+
+    image: test-ubuntu
+    build:
+      context: .
+      dockerfile: Dockerfile.u
+      args:
+        - DEV_UID=${DEV_UID:-50000}
+
+    volumes:
+      - ./dev_package:/opt/dev_package
+    
+    user: "${DEV_UID:-50000}:0"

@@ -1,0 +1,22 @@
+# Build
+# docker build -t test-ubuntu -f Dockerfile.u .
+
+ARG DEVUSER_HOME=/opt/dev_user
+ARG DEV_UID="50000"
+ARG DEVUSER_USER_HOME_DIR=/home/dev_user
+
+FROM ubuntu:22.04 as base
+
+RUN apt update && apt upgrade -y
+
+RUN apt install -y vim
+
+ARG DEVUSER_HOME
+ARG DEVUSER_USER_HOME_DIR
+ARG DEV_UID
+
+RUN adduser --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password \
+       --quiet "dev_user" --uid "${DEV_UID}" --gid "0" --home "${DEVUSER_USER_HOME_DIR}" && \
+    mkdir -p ${DEVUSER_HOME} && chown -R "dev_user:0" "${DEVUSER_USER_HOME_DIR}" ${DEVUSER_HOME}
+
+USER dev_user

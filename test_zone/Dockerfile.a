@@ -1,0 +1,6 @@
+# Build
+# docker build -t test-alpine -f Dockerfile.a .
+
+FROM alpine:3.16.0 as base
+
+RUN apk update && apk install python3.10
