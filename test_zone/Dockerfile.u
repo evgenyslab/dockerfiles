@@ -6,6 +6,8 @@ ARG DEV_UID="50000"
 ARG DEVUSER_USER_HOME_DIR=/home/dev_user
 
 FROM ubuntu:22.04 as base
+# FROM python:3.10.5-bullseye as base
+# FROM python:3.10.5-slim-bullseye as base
 
 RUN apt update && apt upgrade -y
 
@@ -20,3 +22,6 @@ RUN adduser --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-passw
     mkdir -p ${DEVUSER_HOME} && chown -R "dev_user:0" "${DEVUSER_USER_HOME_DIR}" ${DEVUSER_HOME}
 
 USER dev_user
+
+
+CMD ["/bin/bash"]

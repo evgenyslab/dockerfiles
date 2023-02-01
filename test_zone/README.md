@@ -4,3 +4,5 @@ Instructions:
 2. run `docker compose build` to build image
 3. run `docker compose run app-ubuntu` to get interactive shell into image
 4. In the image, navigate to `/opt/dev_package` - can create modify files here, or locally and changes will track.
+
+To install packages in container, exec into it as root user
